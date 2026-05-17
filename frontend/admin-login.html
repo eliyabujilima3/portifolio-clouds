@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
+  <style>
+    body {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f4f4f9;
+      border-radius: 8px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    input {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+    }
+    </style>
+</head>
+<body>
+
+<h2>Admin Login</h2>
+
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<script>
+async function login() {
+  const res = await fetch("http://127.0.0.1:5000/api/login", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value
+    })
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    window.location.href = "admin.html"; // direct redirect
+  } else {
+    alert(data.message); // only show error
+  }
+}
+</script>
+
+</body>
+</html>

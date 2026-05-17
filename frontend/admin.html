@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Messages</title>
+
+  <style>
+    body{
+      font-family: Arial;
+      background:#f4f4f9;
+      padding:40px;
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+    }
+
+    th, td{
+      border:1px solid #ddd;
+      padding:12px;
+      text-align:left;
+    }
+
+    th{
+      background:#2c3e50;
+      color:white;
+    }
+
+    tr:nth-child(even){
+      background:#f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Received Messages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+
+  <tbody id="messagesTable">
+  </tbody>
+</table>
+
+<script>
+async function loadMessages() {
+
+  const res = await fetch("http://127.0.0.1:5000/api/messages");
+
+  const data = await res.json();
+
+  const table = document.getElementById("messagesTable");
+
+  data.forEach(msg => {
+
+    table.innerHTML += `
+      <tr>
+        <td>${msg.id}</td>
+        <td>${msg.name}</td>
+        <td>${msg.email}</td>
+        <td>${msg.message}</td>
+      </tr>
+    `;
+
+  });
+}
+
+loadMessages();
+</script>
+
+</body>
+</html>

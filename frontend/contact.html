@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Me - Eliya</title>
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body{
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header{
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav{
+      margin-top: 10px;
+    }
+
+    nav a{
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover{
+      text-decoration: underline;
+    }
+
+    main{
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+    }
+
+    section h2{
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    section p{
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .contact-container{
+      display: flex;
+      gap: 40px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .contact-form,
+    .contact-info{
+      flex: 1;
+      min-width: 280px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .contact-info h3{
+      margin-bottom: 15px;
+      color: #34495e;
+    }
+
+    .contact-info p{
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    form input,
+    form textarea{
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button{
+      padding: 12px 20px;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    form button:hover{
+      background: #1a252f;
+    }
+
+    a{
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    a:hover{
+      text-decoration: underline;
+    }
+
+    footer{
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+
+    <h1>Contact Me</h1>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html">Skills</a>
+      <a href="qualifications.html">Qualifications</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <section>
+
+      <h2>Get In Touch 📩</h2>
+
+      <p>
+        If you’d like to get in touch,
+        collaborate on a project,
+        or discuss opportunities,
+        feel free to contact me using the form below.
+      </p>
+
+      <div class="contact-container">
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+        
+
+
+          <form>
+
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message</label>
+            <textarea id="message"
+                      name="message"
+                      rows="6"
+                      required></textarea>
+
+            <button type="submit">Send Message</button>
+
+          </form>
+          <div id="responseMessage"></div>  
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+
+          <h3>My Contact Information</h3>
+
+          <p>📍 Dar es Salaam, Tanzania</p>
+
+          <p>
+            📧
+            <a href="mailto:eliyabujilima9@gmail.com">
+              eliyabujilima9@gmail.com
+            </a>
+          </p>
+
+          <p>📞 +255 749 985 051</p>
+
+          <p>
+            🔗
+            <a href="https://zindi.africa/users/ELIYA_BUJILIMA" target="_blank">
+              My Zindi Profile
+            </a>
+          </p>
+
+          <p>
+            💻
+            <a href="https://github.com/Eliyabujilima" target="_blank">
+              My GitHub Profile
+            </a>
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Eliya | My Portfolio</p>
+  </footer>
+<script src="script.js"></script>
+</body>
+</html>
