@@ -7,7 +7,7 @@ document.querySelector("form").addEventListener("submit", async function(e) {
     message: document.getElementById("message").value
   };
 
-  const res = await fetch("http://127.0.0.1:5000/api/contact", {
+  const res = await fetch("https://portifolio-clouds.onrender.com/api/contact", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
