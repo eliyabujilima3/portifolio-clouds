@@ -1,18 +1,35 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask import session
+from dotenv import load_dotenv
+from config import Config
 import os
 
+# ---------------------------
+# LOAD ENV VARIABLES
+# ---------------------------
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = "mysecretkey"
-CORS(app)
+
+# secret key for sessions (change in production)
+app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key")
+
+# allow frontend (Vercel)
+CORS(app, supports_credentials=True)
 
 # ---------------------------
 # DATABASE CONFIG
 # ---------------------------
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(BASE_DIR, "database.db")
+app.config.from_object(Config)
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    if "***" in DATABASE_URL:
+        print("Ignoring invalid DATABASE_URL placeholder; using local SQLite database.")
+    else:
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -32,50 +49,42 @@ class Message(db.Model):
 @app.route("/")
 def home():
     return jsonify({
-        "message": "Flask Contact API is running"
+        "status": "success",
+        "message": "Flask Contact API is running 🚀"
     })
 
 # ---------------------------
-# CONTACT API (SAVE TO DB)
+# CONTACT FORM API
 # ---------------------------
 @app.route("/api/contact", methods=["POST"])
 def contact():
-    data = request.get_json(silent=True)
+    data = request.get_json()
+
     if not data:
-        return jsonify({
-            "status": "error",
-            "message": "Invalid JSON payload"
-        }), 400
+        return jsonify({"status": "error", "message": "Invalid JSON"}), 400
 
     name = data.get("name")
     email = data.get("email")
     message = data.get("message")
 
-    # validation
     if not name or not email or not message:
-        return jsonify({
-            "status": "error",
-            "message": "All fields are required"
-        }), 400
+        return jsonify({"status": "error", "message": "All fields required"}), 400
 
-    # save to database
-    new_message = Message(name=name, email=email, message=message)
-    db.session.add(new_message)
+    new_msg = Message(name=name, email=email, message=message)
+    db.session.add(new_msg)
     db.session.commit()
-
-    print("New message saved:", name, email)
 
     return jsonify({
         "status": "success",
-        "message": "Message received successfully"
+        "message": "Message sent successfully"
     }), 200
 
 # ---------------------------
-# ADMIN: GET ALL MESSAGES
+# GET ALL MESSAGES (ADMIN DASHBOARD)
 # ---------------------------
 @app.route("/api/messages", methods=["GET"])
 def get_messages():
-    messages = Message.query.all()
+    messages = Message.query.order_by(Message.id.desc()).all()
 
     return jsonify([
         {
@@ -85,8 +94,10 @@ def get_messages():
             "message": m.message
         } for m in messages
     ])
-    
-# -------ADMIN LOGIN-------
+
+# ---------------------------
+# ADMIN LOGIN
+# ---------------------------
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -94,19 +105,23 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    # simple hardcoded login (for assignment)
+    # simple admin credentials (assignment purpose)
     if username == "admin" and password == "1234":
-        return jsonify({"message": "Login successful"}), 200
+        session["admin"] = True
+        return jsonify({"status": "success", "message": "Login successful"}), 200
 
-    return jsonify({"message": "Invalid credentials"}), 401
+    return jsonify({"status": "error", "message": "Invalid credentials"}), 401
 
-# -------ADMIN LOGOUT-------
+# ---------------------------
+# ADMIN LOGOUT
+# ---------------------------
 @app.route("/api/logout", methods=["POST"])
 def logout():
     session.clear()
-    return jsonify({"message": "Logout successful"}), 200
+    return jsonify({"status": "success", "message": "Logout successful"})
+
 # ---------------------------
-# INIT DATABASE (AUTO CREATE TABLES)
+# INIT DATABASE
 # ---------------------------
 with app.app_context():
     db.create_all()
