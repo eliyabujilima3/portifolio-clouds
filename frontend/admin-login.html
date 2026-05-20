@@ -35,8 +35,11 @@
 
 <script>
 async function login() {
-  const res = await fetch("http://127.0.0.1:5000/api/login", {
+  const apiBase = "https://portifolio-clouds.onrender.com";
+
+  const res = await fetch(`${apiBase}/api/login`, {
     method: "POST",
+    credentials: 'include',
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
       username: document.getElementById("username").value,
@@ -47,9 +50,9 @@ async function login() {
   const data = await res.json();
 
   if (res.status === 200) {
-    window.location.href = "admin.html"; // direct redirect
+    window.location.href = "admin.html";
   } else {
-    alert(data.message); // only show error
+    alert(data.message);
   }
 }
 </script>
