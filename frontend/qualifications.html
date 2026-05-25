@@ -47,6 +47,7 @@
       padding: 40px 20px;
       max-width: 1000px;
       margin: auto;
+      width: 100%;
     }
 
     h2{
@@ -123,6 +124,37 @@
       color: #2c3e50;
     }
 
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      main {
+        padding: 30px 15px;
+      }
+
+      .cert-item {
+        flex: 1 1 180px;
+      }
+
+      nav a {
+        margin: 0 5px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cert-item {
+        flex: 1 1 150px;
+      }
+
+      .cert-item img {
+        max-width: 180px;
+      }
+
+      nav a {
+        display: block;
+        margin: 5px 0;
+      }
+    }
+
     footer{
       background: #2c3e50;
       color: white;
@@ -155,7 +187,7 @@
     <!-- Education -->
     <div class="qualification-box">
       <h3>Education</h3>
-      <img src="images/eastc-study.jpg" alt="Studying at EASTC" class="edu-photo">
+      <img src="assets/images/eastc-study.jpg" alt="Educational experience at East Africa Statistical Training Centre" class="edu-photo">
       <p>Data Science student at East Africa Statistical Training Centre (EASTC).</p>
     </div>
 
@@ -166,16 +198,16 @@
       <div class="cert-grid">
         <!-- Certificate 1: Data Science -->
         <div class="cert-item">
-          <a href="assets/certificates/my-certificate.pdf" target="_blank" download>
-            <img src="assets/images/my-certificate.jpg" alt="Data Science Certificate – Zindi" class="certificate-pic">
+          <a href="assets/certificates/my-certificate.pdf" target="_blank" download aria-label="Download Data Science Certificate from Zindi">
+            <img src="assets/images/my-certificate.jpg" alt="Data Science Certificate from Zindi Platform">
             <p>Data Science Certificate – Zindi</p>
           </a>
         </div>
 
-        <!-- Certificate 2: Python (uncomment when PDF is ready) -->
+        <!-- Certificate 2: Python for Data Analysis -->
         <div class="cert-item">
-          <a href="assets/certificates/python-cert.pdf" target="_blank" download>
-            <img src="assets/images/python-cert.png" alt="Python for Data Analysis">
+          <a href="assets/certificates/python-cert.pdf" target="_blank" download aria-label="Download Python for Data Analysis Certificate">
+            <img src="assets/images/python-cert.png" alt="Python for Data Analysis Certificate">
             <p>Python for Data Analysis</p>
           </a>
         </div>
