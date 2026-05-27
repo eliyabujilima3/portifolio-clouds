@@ -123,30 +123,36 @@ section p:hover {
 .hero {
   text-align: center;
   padding: 100px 20px;
-  background: #f4f4f4;
+  background: linear-gradient(135deg, #f4f4f4, #e8f0ff);
 }
 
 .hero .name {
-  color: #007BFF;
+  color: #1abc9c;
+  font-weight: bold;
 }
 
 /* Button Styles */
 .btn {
   display: inline-block;
-  padding: 12px 24px;
-  background: #007BFF;
+  padding: 12px 25px;
+  background: #1abc9c;
   color: white;
   text-decoration: none;
   border-radius: 5px;
-  margin-top: 10px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 15px;
+  transition: background 0.3s ease, transform 0.3s ease;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .btn:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 86, 179, 0.3);
+  background: #16a085;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
+}
+
+.btn:active {
+  transform: translateY(-1px);
 }
 
 /* Footer Styles */
@@ -190,6 +196,10 @@ footer {
     font-size: 1.8rem;
   }
 
+  header p {
+    font-size: 1rem;
+  }
+
   nav a {
     margin: 0 8px;
     font-size: 0.9rem;
@@ -200,10 +210,42 @@ footer {
   }
 
   section h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   section p {
     font-size: 1rem;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  header p {
+    font-size: 0.95rem;
+  }
+
+  nav a {
+    margin: 0 6px;
+    font-size: 0.8rem;
+  }
+
+  section {
+    padding: 30px 10px;
+  }
+
+  section h2 {
+    font-size: 1.3rem;
+  }
+
+  section p {
+    font-size: 0.95rem;
   }
 }
