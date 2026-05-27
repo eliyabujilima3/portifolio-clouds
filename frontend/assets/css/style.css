@@ -249,3 +249,13 @@ footer {
     font-size: 0.95rem;
   }
 }
+.profile-pic {
+  width: 200px;          /* fixed width */
+  height: 200px;         /* fixed height */
+  object-fit: cover;     /* crops the image to fit nicely */
+  border-radius: 50%;    /* makes it circular */
+  border: 4px solid #1abc9c; /* optional accent border */
+  display: block;
+  margin: 20px auto;     /* centers the image */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* subtle shadow */
+}
