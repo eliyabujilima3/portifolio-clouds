@@ -36,14 +36,18 @@
     <div class="qualification-box">
       <h3>Certifications & Learning</h3>
 
-      <div class="cert-grid">
-        <!-- Certificate 1: Data Science -->
-        <div class="cert-item">
-            <img src="assets/images/certificates/my-certificate.jpg" alt="Data Science Certificate from Zindi Platform">
-            <p>Data Science Certificate – Zindi</p>
-          </a>
-        </div>
+      <div class="cert-item">
+  <img src="assets/images/my-certificate.jpg" 
+       alt="Data Science Certificate – Zindi" 
+       onclick="openModal(this.src)">
+  <p>Data Science Certificate – Zindi</p>
+</div>
 
+<!-- Modal -->
+<div id="imgModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
         <!-- Certificate 2: Python for Data Analysis -->
         <div class="cert-item">
           <a href="assets/certificates/python-cert.pdf" target="_blank" download aria-label="Download Python for Data Analysis Certificate">
@@ -69,5 +73,16 @@
     <p>&copy; 2026 Eliya Bujilima. All rights reserved.</p>
     <p>"Building solutions through data and innovation."</p>
   </footer>
+  
+  <script>
+function openModal(src) {
+  document.getElementById("imgModal").style.display = "block";
+  document.getElementById("modalImage").src = src;
+}
+function closeModal() {
+  document.getElementById("imgModal").style.display = "none";
+}
+</script>
+
 </body>
 </html>
