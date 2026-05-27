@@ -259,3 +259,84 @@ footer {
   margin: 20px auto;     /* centers the image */
   box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* subtle shadow */
 }
+/* Qualification container */
+.qualification-box {
+  background: #fff;
+  padding: 25px;
+  margin: 25px auto;
+  border-radius: 12px;
+  max-width: 900px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.qualification-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Section headings */
+.qualification-box h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  border-bottom: 2px solid #1abc9c;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+/* Education photo */
+.edu-photo {
+  width: 250px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 15px auto;
+  display: block;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Certificate grid */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.cert-item {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cert-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.cert-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.cert-item p {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Footer styling */
+footer {
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  font-size: 0.95rem;
+}
