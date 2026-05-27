@@ -9,7 +9,6 @@
 
 <div class="admin-dashboard">
   <h1>Messages Dashboard</h1>
-
   <button id="logoutBtn">Logout</button>
 
   <table>
@@ -19,46 +18,13 @@
         <th>Name</th>
         <th>Email</th>
         <th>Message</th>
+        <th>Reply</th>
       </tr>
     </thead>
     <tbody id="messagesTable"></tbody>
   </table>
 </div>
 
-<script>
-async function loadMessages() {
-  const apiBase = "https://portifolio-clouds.onrender.com";
-
-  const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
-  const data = await res.json();
-
-  const table = document.getElementById("messagesTable");
-
-  data.forEach(msg => {
-    table.innerHTML += `
-      <tr>
-        <td>${msg.id}</td>
-        <td>${msg.name}</td>
-        <td>${msg.email}</td>
-        <td>${msg.message}</td>
-      </tr>
-    `;
-  });
-}
-
-loadMessages();
-
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  const apiBase = "https://portifolio-clouds.onrender.com";
-
-  await fetch(`${apiBase}/api/logout`, {
-    method: "POST",
-    credentials: 'include'
-  });
-
-  window.location.href = "admin-login.html";
-});
-</script>
-
+<script src="admin.js"></script>
 </body>
 </html>
