@@ -1,30 +1,79 @@
-document.querySelector("#loginForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const data = {
-    username: document.getElementById("username").value,
-    password: document.getElementById("password").value
-  };
+// Load messages into the dashboard
+async function loadMessages() {
+  const apiBase = "https://portifolio-clouds.onrender.com";
 
   try {
-    const res = await fetch("https://portifolio-clouds.onrender.com/api/login", {
+    const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
+    const data = await res.json();
+
+    const table = document.getElementById("messagesTable");
+    table.innerHTML = "";
+
+    data.forEach(msg => {
+      table.innerHTML += `
+        <tr>
+          <td>${msg.id}</td>
+          <td>${msg.name}</td>
+          <td>${msg.email}</td>
+          <td>${msg.message}</td>
+          <td>
+            <form class="reply-form" onsubmit="sendReply(event, '${msg.email}')">
+              <textarea name="replyMessage" placeholder="Type reply..." required></textarea>
+              <button type="submit">Send</button>
+            </form>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (error) {
+    console.error("Error loading messages:", error);
+    alert("Failed to load messages.");
+  }
+}
+
+// Send reply to backend
+async function sendReply(event, email) {
+  event.preventDefault();
+  const message = event.target.replyMessage.value;
+
+  const apiBase = "https://portifolio-clouds.onrender.com";
+
+  try {
+    const res = await fetch(`${apiBase}/api/reply`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, message })
     });
 
-    const result = await res.json();
-
-    if (res.status === 200) {
-      window.location.href = "admin.html";
+    if (res.ok) {
+      alert("Reply sent successfully!");
+      event.target.reset();
     } else {
-      alert(result.message);
+      const result = await res.json();
+      alert("Error: " + result.message);
     }
-
   } catch (error) {
-    console.log(error);
-    alert("Server error");
+    console.error("Error sending reply:", error);
+    alert("Server error while sending reply.");
+  }
+}
+
+// Logout functionality
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const apiBase = "https://portifolio-clouds.onrender.com";
+
+  try {
+    await fetch(`${apiBase}/api/logout`, {
+      method: "POST",
+      credentials: 'include'
+    });
+    window.location.href = "admin-login.html";
+  } catch (error) {
+    console.error("Error logging out:", error);
+    alert("Logout failed.");
   }
 });
+
+// Initialize dashboard
+loadMessages();
