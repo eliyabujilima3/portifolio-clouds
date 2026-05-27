@@ -7,23 +7,23 @@
 
 <body>
 
+<div class="admin-dashboard">
+  <h1>Messages Dashboard</h1>
 
-<h1>Messages Dashboard</h1>
+  <button id="logoutBtn">Logout</button>
 
-<button id="logoutBtn">Logout</button>
-
-<table border="1" cellpadding="10">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Message</th>
-    </tr>
-  </thead>
-
-  <tbody id="messagesTable"></tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+      </tr>
+    </thead>
+    <tbody id="messagesTable"></tbody>
+  </table>
+</div>
 
 <script>
 async function loadMessages() {
