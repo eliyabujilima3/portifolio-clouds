@@ -424,3 +424,76 @@ footer {
   background: #16a085;
   transform: scale(1.05);
 }
+/* Dashboard container */
+.admin-dashboard {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Table styling */
+.admin-dashboard table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 25px;
+}
+
+.admin-dashboard th,
+.admin-dashboard td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.admin-dashboard th {
+  background: #2c3e50;
+  color: #fff;
+}
+
+.admin-dashboard tr:hover {
+  background: #f9f9f9;
+}
+
+/* Reply form */
+.reply-form {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f4f4f9;
+  border-radius: 10px;
+}
+
+.reply-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.reply-form textarea {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 15px;
+}
+
+.reply-form button {
+  background: #1abc9c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.reply-form button:hover {
+  background: #16a085;
+  transform: scale(1.05);
+}
