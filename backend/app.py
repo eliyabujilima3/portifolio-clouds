@@ -121,6 +121,42 @@ def logout():
     return jsonify({"status": "success", "message": "Logout successful"})
 
 # ---------------------------
+# ADMIN REPLY TO MESSAGE
+# ---------------------------
+@app.route("/api/reply", methods=["POST"])
+def reply():
+    if "admin" not in session:
+        return jsonify({"status": "error", "message": "Unauthorized"}), 403
+
+    data = request.get_json()
+    email = data.get("email")
+    message = data.get("message")
+
+    if not email or not message:
+        return jsonify({"status": "error", "message": "Email and message required"}), 400
+
+    try:
+        # Example: send reply via SMTP (replace with your mail server)
+        import smtplib
+        from email.mime.text import MIMEText
+
+        msg = MIMEText(message)
+        msg["Subject"] = "Reply from Admin"
+        msg["From"] = os.getenv("ADMIN_EMAIL", "your-email@example.com")
+        msg["To"] = email
+
+        with smtplib.SMTP(os.getenv("SMTP_HOST", "smtp.gmail.com"), 587) as server:
+            server.starttls()
+            server.login(os.getenv("ADMIN_EMAIL"), os.getenv("ADMIN_PASSWORD"))
+            server.sendmail(msg["From"], [email], msg.as_string())
+
+        return jsonify({"status": "success", "message": "Reply sent successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+# ---------------------------
 # INIT DATABASE
 # ---------------------------
 with app.app_context():
