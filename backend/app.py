@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
-from backend.config import Config
+from config import Config
+from models import db, Message
+from routes.reply import reply_bp
+from sqlalchemy import text
 import os
 
 # ---------------------------
@@ -10,17 +12,35 @@ import os
 # ---------------------------
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../frontend", static_url_path="")
 
 # secret key for sessions (change in production)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key")
 
-# allow frontend (Vercel)
-CORS(app, supports_credentials=True)
+# session cookie settings for local development
+app.config["SESSION_COOKIE_SAMESITE"] = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+secure_cookie = os.getenv("SESSION_COOKIE_SECURE")
+if secure_cookie is None:
+    app.config["SESSION_COOKIE_SECURE"] = False
+else:
+    app.config["SESSION_COOKIE_SECURE"] = secure_cookie.lower() == "true"
+
+# allow frontend requests from the local app origin only, with credentials
+CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:5000", "http://localhost:5000"]}}, supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"], methods=["GET", "POST", "OPTIONS"])
+
+@app.after_request
+def add_cors_headers(response):
+    origin = request.headers.get("Origin")
+    if origin:
+        response.headers["Access-Control-Allow-Origin"] = origin
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    return response
 
 # ---------------------------
 # DATABASE CONFIG
-# ---------------------------
 app.config.from_object(Config)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -32,20 +52,11 @@ if DATABASE_URL:
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
-
-# ---------------------------
-# DATABASE MODEL
-# ---------------------------
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    message = db.Column(db.Text, nullable=False)
+db.init_app(app)
+app.register_blueprint(reply_bp)
 
 # ---------------------------
 # HOME ROUTE
-# ---------------------------
 @app.route("/")
 def home():
     return jsonify({
@@ -55,7 +66,6 @@ def home():
 
 # ---------------------------
 # CONTACT FORM API
-# ---------------------------
 @app.route("/api/contact", methods=["POST"])
 def contact():
     data = request.get_json()
@@ -76,28 +86,35 @@ def contact():
 
     return jsonify({
         "status": "success",
-        "message": "Message sent successfully"
+        "message": "Message sent successfully",
+        "id": new_msg.id
     }), 200
 
 # ---------------------------
 # GET ALL MESSAGES (ADMIN DASHBOARD)
-# ---------------------------
 @app.route("/api/messages", methods=["GET"])
 def get_messages():
-    messages = Message.query.order_by(Message.id.desc()).all()
+    try:
+        email = request.args.get("email")
+        if email:
+            messages = Message.query.filter_by(email=email).order_by(Message.id.desc()).all()
+        else:
+            messages = Message.query.order_by(Message.id.desc()).all()
+        return jsonify([m.to_dict() for m in messages])
+    except Exception as e:
+        app.logger.exception("Error fetching messages")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
-    return jsonify([
-        {
-            "id": m.id,
-            "name": m.name,
-            "email": m.email,
-            "message": m.message
-        } for m in messages
-    ])
+
+@app.route("/api/message/<int:msg_id>", methods=["GET"])
+def get_message(msg_id):
+    msg = Message.query.get(msg_id)
+    if not msg:
+        return jsonify({"status": "error", "message": "Message not found"}), 404
+    return jsonify(msg.to_dict()), 200
 
 # ---------------------------
 # ADMIN LOGIN
-# ---------------------------
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -114,56 +131,26 @@ def login():
 
 # ---------------------------
 # ADMIN LOGOUT
-# ---------------------------
 @app.route("/api/logout", methods=["POST"])
 def logout():
     session.clear()
     return jsonify({"status": "success", "message": "Logout successful"})
 
 # ---------------------------
-# ADMIN REPLY TO MESSAGE
-# ---------------------------
-@app.route("/api/reply", methods=["POST"])
-def reply():
-    if "admin" not in session:
-        return jsonify({"status": "error", "message": "Unauthorized"}), 403
-
-    data = request.get_json()
-    email = data.get("email")
-    message = data.get("message")
-
-    if not email or not message:
-        return jsonify({"status": "error", "message": "Email and message required"}), 400
-
-    try:
-        # Example: send reply via SMTP (replace with your mail server)
-        import smtplib
-        from email.mime.text import MIMEText
-
-        msg = MIMEText(message)
-        msg["Subject"] = "Reply from Admin"
-        msg["From"] = os.getenv("ADMIN_EMAIL", "your-email@example.com")
-        msg["To"] = email
-
-        with smtplib.SMTP(os.getenv("SMTP_HOST", "smtp.gmail.com"), 587) as server:
-            server.starttls()
-            server.login(os.getenv("ADMIN_EMAIL"), os.getenv("ADMIN_PASSWORD"))
-            server.sendmail(msg["From"], [email], msg.as_string())
-
-        return jsonify({"status": "success", "message": "Reply sent successfully"}), 200
-
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
-
-
-# ---------------------------
 # INIT DATABASE
-# ---------------------------
 with app.app_context():
     db.create_all()
 
+    # auto-add reply column if this DB was created before the reply field existed
+    inspector = db.inspect(db.engine)
+    if inspector.has_table("message"):
+        columns = [col["name"] for col in inspector.get_columns("message")]
+        if "reply" not in columns:
+            with db.engine.connect() as conn:
+                conn.execute(text("ALTER TABLE message ADD COLUMN reply TEXT"))
+                conn.commit()
+
 # ---------------------------
 # RUN SERVER
-# ---------------------------
 if __name__ == "__main__":
     app.run(debug=True)

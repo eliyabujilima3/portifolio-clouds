@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from models import Message
+from backend.models import Message
 
 admin_bp = Blueprint("admin", __name__)
 
