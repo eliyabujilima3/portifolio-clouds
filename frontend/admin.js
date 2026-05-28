@@ -1,15 +1,31 @@
+function getApiBase() {
+  if (!window.location.origin || window.location.origin === "null" || window.location.protocol === "file:") {
+    return "http://127.0.0.1:5000";
+  }
+  // if frontend served from a different local port, assume backend runs on 5000
+  const port = window.location.port;
+  if (port && port !== "5000") {
+    return `${window.location.protocol}//${window.location.hostname}:5000`;
+  }
+  return window.location.origin;
+}
+
 // Load messages into the dashboard
 async function loadMessages() {
-  const apiBase = window.location.origin === "null" ? "http://127.0.0.1:5000" : window.location.origin;
+  const apiBase = getApiBase();
 
   try {
-    const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
+    const res = await fetch(`${apiBase}/api/messages`);
+    if (!res.ok) {
+      throw new Error(`Failed to load messages: ${res.status} ${res.statusText}`);
+    }
     const data = await res.json();
 
     const table = document.getElementById("messagesTable");
     table.innerHTML = "";
 
     data.forEach(msg => {
+      const existingReply = msg.reply ? `<div class="existing-reply"><strong>Saved reply:</strong><br>${msg.reply}</div>` : "";
       table.innerHTML += `
         <tr>
           <td>${msg.id}</td>
@@ -17,6 +33,7 @@ async function loadMessages() {
           <td>${msg.email}</td>
           <td>${msg.message}</td>
           <td>
+            ${existingReply}
             <form class="reply-form" onsubmit="sendReply(event, ${msg.id})">
               <textarea name="replyMessage" placeholder="Type reply..." required></textarea>
               <button type="submit">Send</button>
@@ -27,7 +44,7 @@ async function loadMessages() {
     });
   } catch (error) {
     console.error("Error loading messages:", error);
-    alert("Failed to load messages.");
+    alert("Failed to load messages: " + (error.message || error));
   }
 }
 
@@ -36,7 +53,7 @@ async function sendReply(event, messageId) {
   event.preventDefault();
   const message = event.target.replyMessage.value;
 
-  const apiBase = window.location.origin === "null" ? "http://127.0.0.1:5000" : window.location.origin;
+  const apiBase = getApiBase();
 
   try {
     const res = await fetch(`${apiBase}/api/reply`, {
@@ -47,8 +64,9 @@ async function sendReply(event, messageId) {
     });
 
     if (res.ok) {
-      alert("Reply sent successfully!");
+      alert("Reply saved successfully!");
       event.target.reset();
+      loadMessages();
     } else {
       const result = await res.json();
       alert("Error: " + result.message);
@@ -61,7 +79,7 @@ async function sendReply(event, messageId) {
 
 // Logout functionality
 document.getElementById("logoutBtn").addEventListener("click", async () => {
-  const apiBase = window.location.origin === "null" ? "http://127.0.0.1:5000" : window.location.origin;
+  const apiBase = getApiBase();
 
   try {
     await fetch(`${apiBase}/api/logout`, {

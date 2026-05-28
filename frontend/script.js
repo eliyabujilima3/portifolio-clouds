@@ -7,7 +7,15 @@ document.querySelector("form").addEventListener("submit", async function(e) {
     message: document.getElementById("message").value
   };
 
-  const res = await fetch("https://portifolio-clouds.onrender.com/api/contact", {
+  let apiBase;
+  if (!window.location.origin || window.location.origin === "null" || window.location.protocol === "file:") {
+    apiBase = "http://127.0.0.1:5000";
+  } else if (window.location.port && window.location.port !== "5000") {
+    apiBase = `${window.location.protocol}//${window.location.hostname}:5000`;
+  } else {
+    apiBase = window.location.origin;
+  }
+  const res = await fetch(`${apiBase}/api/contact`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -27,7 +35,11 @@ document.querySelector("form").addEventListener("submit", async function(e) {
     document.querySelector("form").appendChild(div);
   }
 
-  document.getElementById("responseMessage").innerText = result.message;
+  let text = result.message;
+  if (result.id) {
+    text += ` (Your message ID: ${result.id}) \nView reply: ` + apiBase + `/reply-view.html?id=${result.id}`;
+  }
+  document.getElementById("responseMessage").innerText = text;
   document.getElementById("responseMessage").style.color =
     res.status === 200 ? "green" : "red";
 
