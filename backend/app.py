@@ -25,18 +25,28 @@ if secure_cookie is None:
 else:
     app.config["SESSION_COOKIE_SECURE"] = secure_cookie.lower() == "true"
 
-# allow frontend requests from the local app origin only, with credentials
-CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:5000", "http://localhost:5000"]}}, supports_credentials=True,
+# ---------------------------
+# ALLOWED ORIGINS (CORS)
+# ---------------------------
+ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5000",
+    "http://localhost:5000",
+    "https://portifolio-clouds-zlqf-git-main-eliya-bujilima-s-projects.vercel.app",
+    "https://portifolio-clouds.onrender.com"
+]
+
+# allow frontend requests from allowed origins only, with credentials
+CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}}, supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"], methods=["GET", "POST", "OPTIONS"])
 
 @app.after_request
 def add_cors_headers(response):
     origin = request.headers.get("Origin")
-    if origin:
+    if origin in ALLOWED_ORIGINS:
         response.headers["Access-Control-Allow-Origin"] = origin
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     return response
 
 # ---------------------------
@@ -122,8 +132,11 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    # simple admin credentials (assignment purpose)
-    if username == "admin" and password == "1234":
+    # Get credentials from environment variables (more secure)
+    admin_username = os.getenv("ADMIN_USERNAME", "admin")
+    admin_password = os.getenv("ADMIN_PASSWORD", "1234")
+
+    if username == admin_username and password == admin_password:
         session["admin"] = True
         return jsonify({"status": "success", "message": "Login successful"}), 200
 
