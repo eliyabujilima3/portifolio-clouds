@@ -36,32 +36,54 @@ def send_reply_email(to_email: str, subject: str, body: str) -> None:
 
 @reply_bp.route("/api/reply", methods=["POST"])
 def reply():
-    if "admin" not in session:
-        return jsonify({"status": "error", "message": "Unauthorized"}), 403
-
-    data = request.get_json()
-    message_id = data.get("id")
-    reply_text = data.get("message")
-
-    if not message_id or not reply_text:
-        return jsonify({"status": "error", "message": "Message ID and reply text required"}), 400
-
-    msg = Message.query.get(message_id)
-    if not msg:
-        return jsonify({"status": "error", "message": "Message not found"}), 404
-
-    msg.reply = reply_text
-    db.session.commit()
-
-    # Try to send reply by email (optional). Log but don't fail the request if email sending fails.
     try:
-        subject = f"Reply to your message (id: {msg.id})"
-        send_reply_email(msg.email, subject, reply_text)
-    except Exception as e:
-        current_app.logger.exception("Failed to send reply email")
-        # In debug mode include the exception message in the response to help troubleshooting
-        if current_app.debug:
-            return jsonify({"status": "success", "message": "Reply stored; email send failed", "error": str(e), "reply": msg.reply}), 200
-        return jsonify({"status": "success", "message": "Reply stored; email send failed", "reply": msg.reply}), 200
+        if "admin" not in session:
+            return jsonify({"status": "error", "message": "Unauthorized"}), 403
 
-    return jsonify({"status": "success", "message": "Reply stored and emailed successfully", "reply": msg.reply}), 200
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"status": "error", "message": "Invalid JSON payload"}), 400
+
+        message_id = data.get("id")
+        reply_text = data.get("message")
+
+        try:
+            message_id = int(message_id)
+        except (TypeError, ValueError):
+            return jsonify({"status": "error", "message": "Message ID must be a number"}), 400
+
+        if not message_id or not reply_text:
+            return jsonify({"status": "error", "message": "Message ID and reply text required"}), 400
+
+        try:
+            msg = db.session.get(Message, message_id)
+        except Exception:
+            current_app.logger.exception("Failed to retrieve message")
+            return jsonify({"status": "error", "message": "Database error while retrieving message"}), 500
+
+        if not msg:
+            return jsonify({"status": "error", "message": "Message not found"}), 404
+
+        msg.reply = reply_text
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            current_app.logger.exception("Failed to save reply")
+            return jsonify({"status": "error", "message": "Database error while saving reply"}), 500
+
+        # Try to send reply by email (optional). Log but don't fail the request if email sending fails.
+        try:
+            subject = f"Reply to your message (id: {msg.id})"
+            send_reply_email(msg.email, subject, reply_text)
+        except Exception as e:
+            current_app.logger.exception("Failed to send reply email")
+            # In debug mode include the exception message in the response to help troubleshooting
+            if current_app.debug:
+                return jsonify({"status": "success", "message": "Reply stored; email send failed", "error": str(e), "reply": msg.reply}), 200
+            return jsonify({"status": "success", "message": "Reply stored; email send failed", "reply": msg.reply}), 200
+
+        return jsonify({"status": "success", "message": "Reply stored and emailed successfully", "reply": msg.reply}), 200
+    except Exception:
+        current_app.logger.exception("Unhandled exception in reply route")
+        return jsonify({"status": "error", "message": "Internal server error"}), 500

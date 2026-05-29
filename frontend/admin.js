@@ -9,7 +9,7 @@ async function loadMessages() {
   const apiBase = getApiBase();
 
   try {
-    const res = await fetch(`${apiBase}/api/messages`);
+    const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
     if (!res.ok) {
       throw new Error(`Failed to load messages: ${res.status} ${res.statusText}`);
     }
