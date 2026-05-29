@@ -1,6 +1,12 @@
 // Load messages into the dashboard
+function getApiBase() {
+  return (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://127.0.0.1:5000"
+    : "https://portifolio-clouds.onrender.com";
+}
+
 async function loadMessages() {
-  const apiBase = window.location.origin === "null" ? "http://127.0.0.1:5000" : window.location.origin;
+  const apiBase = getApiBase();
 
   try {
     const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
@@ -36,7 +42,7 @@ async function sendReply(event, messageId) {
   event.preventDefault();
   const message = event.target.replyMessage.value;
 
-  const apiBase = window.location.origin === "null" ? "http://127.0.0.1:5000" : window.location.origin;
+  const apiBase = getApiBase();
 
   try {
     const res = await fetch(`${apiBase}/api/reply`, {
@@ -61,7 +67,7 @@ async function sendReply(event, messageId) {
 
 // Logout functionality
 document.getElementById("logoutBtn").addEventListener("click", async () => {
-  const apiBase = window.location.origin === "null" ? "http://127.0.0.1:5000" : window.location.origin;
+  const apiBase = getApiBase();
 
   try {
     await fetch(`${apiBase}/api/logout`, {

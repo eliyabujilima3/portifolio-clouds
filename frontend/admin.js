@@ -1,13 +1,7 @@
 function getApiBase() {
-  if (!window.location.origin || window.location.origin === "null" || window.location.protocol === "file:") {
-    return "http://127.0.0.1:5000";
-  }
-  // if frontend served from a different local port, assume backend runs on 5000
-  const port = window.location.port;
-  if (port && port !== "5000") {
-    return `${window.location.protocol}//${window.location.hostname}:5000`;
-  }
-  return window.location.origin;
+  return (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://127.0.0.1:5000"
+    : "https://portifolio-clouds.onrender.com";
 }
 
 // Load messages into the dashboard

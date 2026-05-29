@@ -7,14 +7,10 @@ document.querySelector("form").addEventListener("submit", async function(e) {
     message: document.getElementById("message").value
   };
 
-  let apiBase;
-  if (!window.location.origin || window.location.origin === "null" || window.location.protocol === "file:") {
-    apiBase = "http://127.0.0.1:5000";
-  } else if (window.location.port && window.location.port !== "5000") {
-    apiBase = `${window.location.protocol}//${window.location.hostname}:5000`;
-  } else {
-    apiBase = window.location.origin;
-  }
+  const apiBase = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://127.0.0.1:5000"
+    : "https://portifolio-clouds.onrender.com";
+
   const res = await fetch(`${apiBase}/api/contact`, {
     method: "POST",
     headers: {
