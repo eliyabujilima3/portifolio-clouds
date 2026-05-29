@@ -1,11 +1,24 @@
 from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
-from config import Config
-from models import db, Message
-from routes.reply import reply_bp
 from sqlalchemy import text
 import os
+import sys
+
+# Ensure backend package imports work whether the app is run from the repo root
+# or from inside the backend folder.
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+try:
+    from backend.config import Config
+    from backend.models import db, Message
+    from backend.routes.reply import reply_bp
+except ImportError:
+    from config import Config
+    from models import db, Message
+    from routes.reply import reply_bp
 
 # ---------------------------
 # LOAD ENV VARIABLES
