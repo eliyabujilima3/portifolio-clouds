@@ -17,13 +17,20 @@ app = Flask(__name__, static_folder="../frontend", static_url_path="")
 # secret key for sessions (change in production)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key")
 
-# session cookie settings for local development
-app.config["SESSION_COOKIE_SAMESITE"] = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
-secure_cookie = os.getenv("SESSION_COOKIE_SECURE")
-if secure_cookie is None:
-    app.config["SESSION_COOKIE_SECURE"] = False
+# session cookie settings
+# Use SameSite=None + Secure=True on deployed HTTPS hosts like Render,
+# while keeping Lax/Secure=False for local development.
+use_secure_cookies = os.getenv("SESSION_COOKIE_SECURE")
+if use_secure_cookies is None:
+    if os.getenv("RENDER") == "true" or os.getenv("ENV") == "production":
+        app.config["SESSION_COOKIE_SAMESITE"] = "None"
+        app.config["SESSION_COOKIE_SECURE"] = True
+    else:
+        app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+        app.config["SESSION_COOKIE_SECURE"] = False
 else:
-    app.config["SESSION_COOKIE_SECURE"] = secure_cookie.lower() == "true"
+    app.config["SESSION_COOKIE_SAMESITE"] = os.getenv("SESSION_COOKIE_SAMESITE", "None")
+    app.config["SESSION_COOKIE_SECURE"] = use_secure_cookies.lower() == "true"
 
 # ---------------------------
 # ALLOWED ORIGINS (CORS)
