@@ -1,9 +1,13 @@
 from flask import Blueprint, request, jsonify, session, current_app
-from models import db, Message
 import os
 import smtplib
 import ssl
 from email.message import EmailMessage
+
+try:
+    from backend.models import db, Message
+except ImportError:
+    from models import db, Message
 
 reply_bp = Blueprint("reply", __name__)
 
@@ -56,7 +60,7 @@ def reply():
             return jsonify({"status": "error", "message": "Message ID and reply text required"}), 400
 
         try:
-            msg = db.session.get(Message, message_id)
+            msg = Message.query.filter_by(id=message_id).first()
         except Exception:
             current_app.logger.exception("Failed to retrieve message")
             return jsonify({"status": "error", "message": "Database error while retrieving message"}), 500
