@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 from config import Config
@@ -69,6 +69,8 @@ if DATABASE_URL:
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
+
 db.init_app(app)
 app.register_blueprint(reply_bp)
 
@@ -80,6 +82,12 @@ def home():
         "status": "success",
         "message": "Flask Contact API is running 🚀"
     })
+
+@app.route("/<path:path>")
+def serve_frontend(path):
+    if path.startswith("api/"):
+        return jsonify({"status": "error", "message": "Not found"}), 404
+    return send_from_directory(frontend_dir, path)
 
 # ---------------------------
 # CONTACT FORM API
