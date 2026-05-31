@@ -582,3 +582,69 @@ footer {
   background: #16a085;
   transform: scale(1.05);
 }
+/* =========================
+   SKILLS PAGE
+========================= */
+
+.skills-container {
+  background: #ffffff;
+  max-width: 900px;
+  margin: 25px auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.skills-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.skills-container h4 {
+  color: #2c3e50;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-left: 4px solid #1abc9c;
+  padding-left: 12px;
+}
+
+.skills-container p {
+  margin: 10px 0;
+  color: #555;
+  font-size: 1rem;
+  padding-left: 15px;
+  position: relative;
+}
+
+.skills-container p::before {
+  content: "✓";
+  color: #1abc9c;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Skills section heading */
+section h2 {
+  margin-bottom: 35px;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+
+  .skills-container {
+    padding: 20px;
+    margin: 20px auto;
+  }
+
+  .skills-container h4 {
+    font-size: 1.1rem;
+  }
+
+  .skills-container p {
+    font-size: 0.95rem;
+  }
+
+}
