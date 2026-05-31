@@ -1,4 +1,6 @@
-/* Global Styles */
+/* =========================
+   GLOBAL RESET
+========================= */
 * {
   margin: 0;
   padding: 0;
@@ -15,485 +17,273 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Header Styles */
+/* =========================
+   HEADER (PRO LEVEL UI)
+========================= */
 header {
   background: linear-gradient(135deg, #2c3e50, #34495e);
   color: white;
-  padding: 25px;
+  padding: 30px 20px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  animation: fadeInDown 1s ease-in-out;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  animation: fadeInDown 0.9s ease-in-out;
 }
 
 header h1 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
+  font-size: 2.4rem;
   letter-spacing: 1px;
 }
 
 header p {
   font-size: 1.1rem;
-  margin-bottom: 15px;
-  opacity: 0.9;
+  opacity: 0.85;
+  margin-top: 8px;
 }
 
-/* Navigation Styles */
+/* =========================
+   NAVIGATION (CLEAN MODERN)
+========================= */
 nav {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
-nav a {
-  color: #f1f1f1;
-  margin: 0 12px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease, transform 0.3s ease;
-  display: inline-block;
-}
-
-nav a:hover {
-  color: #1abc9c;
-  transform: scale(1.1);
-}
-
-/* Navigation List Styles (for structured nav) */
 nav ul {
   list-style: none;
   display: flex;
   justify-content: center;
-  margin: 0;
-  padding: 0;
   flex-wrap: wrap;
+  gap: 18px;
 }
 
-nav ul li {
-  margin: 0 15px;
-}
-
-nav ul li a {
+nav a {
   color: white;
   text-decoration: none;
-  transition: color 0.3s ease;
+  font-weight: 600;
+  padding: 6px 10px;
+  transition: 0.3s ease;
+  border-radius: 6px;
 }
 
-nav ul li a:hover {
+nav a:hover {
   color: #1abc9c;
+  transform: scale(1.05);
+  background: rgba(255,255,255,0.08);
 }
 
-/* Section Styles */
-section {
-  flex: 1;
-  padding: 60px 25px;
-  text-align: center;
-  max-width: 900px;
-  margin: auto;
-  line-height: 1.8;
-  animation: fadeInUp 1.2s ease-in-out;
-}
-
-section h2 {
-  margin-bottom: 20px;
-  color: #2c3e50;
-  font-size: 2rem;
-  position: relative;
-}
-
-section h2::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 3px;
-  background: #1abc9c;
-  margin: 10px auto 0;
-  border-radius: 2px;
-}
-
-section p {
-  margin-bottom: 18px;
-  font-size: 1.1rem;
-  color: #555;
-  transition: transform 0.3s ease;
-}
-
-section p:hover {
-  transform: translateY(-3px);
-}
-
-/* Hero Section */
+/* =========================
+   HERO SECTION (IMPROVED)
+========================= */
 .hero {
   text-align: center;
-  padding: 100px 20px;
+  padding: 110px 20px;
   background: linear-gradient(135deg, #f4f4f4, #e8f0ff);
+}
+
+.hero h2 {
+  font-size: 3rem;
+  font-weight: 800;
 }
 
 .hero .name {
   color: #1abc9c;
-  font-weight: bold;
 }
 
-/* Button Styles */
+.hero p {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* =========================
+   BUTTONS (PRO UI)
+========================= */
 .btn {
   display: inline-block;
-  padding: 12px 25px;
+  padding: 12px 26px;
   background: #1abc9c;
   color: white;
   text-decoration: none;
-  border-radius: 5px;
-  margin-top: 15px;
-  transition: background 0.3s ease, transform 0.3s ease;
+  border-radius: 8px;
+  margin-top: 18px;
   font-weight: bold;
-  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn:hover {
   background: #16a085;
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
+  box-shadow: 0 8px 18px rgba(26, 188, 156, 0.3);
 }
 
-.btn:active {
-  transform: translateY(-1px);
+/* =========================
+   SECTIONS (UNIFIED STYLE)
+========================= */
+section {
+  padding: 60px 25px;
+  max-width: 1000px;
+  margin: auto;
+  animation: fadeInUp 1s ease-in-out;
 }
 
-/* Footer Styles */
-footer {
-  background: #2c3e50;
-  color: white;
+section h2 {
+  font-size: 2rem;
   text-align: center;
-  padding: 18px;
-  margin-top: auto;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  box-shadow: 0 -3px 8px rgba(0,0,0,0.15);
+  margin-bottom: 25px;
+  color: #2c3e50;
 }
 
-/* Animations */
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  header h1 {
-    font-size: 1.8rem;
-  }
-
-  header p {
-    font-size: 1rem;
-  }
-
-  nav a {
-    margin: 0 8px;
-    font-size: 0.9rem;
-  }
-
-  section {
-    padding: 40px 15px;
-  }
-
-  section h2 {
-    font-size: 1.6rem;
-  }
-
-  section p {
-    font-size: 1rem;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 480px) {
-  header h1 {
-    font-size: 1.5rem;
-  }
-
-  header p {
-    font-size: 0.95rem;
-  }
-
-  nav a {
-    margin: 0 6px;
-    font-size: 0.8rem;
-  }
-
-  section {
-    padding: 30px 10px;
-  }
-
-  section h2 {
-    font-size: 1.3rem;
-  }
-
-  section p {
-    font-size: 0.95rem;
-  }
-}
-.profile-pic {
-  width: 200px;          /* fixed width */
-  height: 200px;         /* fixed height */
-  object-fit: cover;     /* crops the image to fit nicely */
-  border-radius: 50%;    /* makes it circular */
-  border: 4px solid #1abc9c; /* optional accent border */
+section h2::after {
+  content: "";
   display: block;
-  margin: 20px auto;     /* centers the image */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* subtle shadow */
+  width: 60px;
+  height: 3px;
+  background: #1abc9c;
+  margin: 10px auto;
+  border-radius: 2px;
 }
-/* Qualification container */
-.qualification-box {
+
+section p {
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* =========================
+   CARDS (ABOUT, PROJECTS, ETC)
+========================= */
+.card {
   background: #fff;
   padding: 25px;
-  margin: 25px auto;
   border-radius: 12px;
-  max-width: 900px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  transition: transform 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.qualification-box:hover {
+.card:hover {
   transform: translateY(-5px);
 }
 
-/* Section headings */
-.qualification-box h3 {
-  color: #2c3e50;
-  margin-bottom: 15px;
-  font-size: 1.4rem;
-  border-bottom: 2px solid #1abc9c;
-  display: inline-block;
-  padding-bottom: 5px;
-}
-
-/* Education photo */
-.edu-photo {
-  width: 250px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin: 15px auto;
-  display: block;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-}
-
-/* Certificate grid */
-.cert-grid {
+/* =========================
+   SKILLS
+========================= */
+.skills {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
-  margin-top: 20px;
 }
 
-.cert-item {
-  background: #f9f9f9;
-  padding: 15px;
+.skill {
+  background: #fff;
+  padding: 18px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
 
-.cert-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.bar {
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
-.cert-item img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
+.bar div {
+  height: 100%;
+  background: #1abc9c;
 }
 
-.cert-item p {
-  font-size: 0.95rem;
-  color: #333;
-  font-weight: bold;
+/* =========================
+   PROJECTS
+========================= */
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
 }
 
-/* Footer styling */
-footer {
-  background: #2c3e50;
-  color: white;
-  text-align: center;
+.project {
+  background: #fff;
   padding: 20px;
-  margin-top: 40px;
-  font-size: 0.95rem;
-}
-/* Quick modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  justify-content: center;
-  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  transition: 0.3s;
 }
 
-.modal img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+.project:hover {
+  transform: translateY(-6px);
 }
 
-.modal.show {
-  display: flex;
+/* =========================
+   PROFILE IMAGE
+========================= */
+.profile-pic {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #1abc9c;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
 
-.modal-close {
-  position: absolute;
-  top: 20px; right: 30px;
-  font-size: 35px;
-  color: #fff;
-  cursor: pointer;
-}
-/* Contact form container */
+/* =========================
+   CONTACT FORM (PRO LEVEL)
+========================= */
 .contact-form {
   max-width: 600px;
-  margin: 40px auto;
+  margin: auto;
+  background: white;
   padding: 25px;
-  background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Form labels */
-.contact-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-/* Inputs and textarea */
 .contact-form input,
 .contact-form textarea {
   width: 100%;
   padding: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
   border-color: #1abc9c;
-  box-shadow: 0 0 6px rgba(26, 188, 156, 0.4);
   outline: none;
+  box-shadow: 0 0 8px rgba(26,188,156,0.3);
 }
 
-/* Submit button */
-.contact-form button {
-  background: #1abc9c;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.contact-form button:hover {
-  background: #16a085;
-  transform: scale(1.05);
-}
-/* Dashboard container */
-.admin-dashboard {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Table styling */
-.admin-dashboard table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 25px;
-}
-
-.admin-dashboard th,
-.admin-dashboard td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-}
-
-.admin-dashboard th {
+/* =========================
+   FOOTER (FIXED DUPLICATE ISSUE)
+========================= */
+footer {
   background: #2c3e50;
-  color: #fff;
-}
-
-.admin-dashboard tr:hover {
-  background: #f9f9f9;
-}
-
-/* Reply form */
-.reply-form {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f4f4f9;
-  border-radius: 10px;
-}
-
-.reply-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-.reply-form textarea {
-  width: 100%;
-  height: 120px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  resize: vertical;
-  margin-bottom: 15px;
-}
-
-.reply-form button {
-  background: #1abc9c;
   color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
 }
 
-.reply-form button:hover {
-  background: #16a085;
-  transform: scale(1.05);
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 768px) {
+  header h1 { font-size: 1.8rem; }
+  .hero h2 { font-size: 2rem; }
+  section { padding: 40px 15px; }
 }
