@@ -648,3 +648,94 @@ section h2 {
   }
 
 }
+/* =========================
+   PROJECTS PAGE
+========================= */
+
+.project {
+  background: #ffffff;
+  max-width: 900px;
+  margin: 25px auto;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+  transition: all 0.3s ease;
+  border-left: 5px solid #1abc9c;
+}
+
+.project:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+}
+
+.project h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+.project p {
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   PROFILE LINKS
+========================= */
+
+.profile-link {
+  max-width: 900px;
+  margin: 20px auto 40px;
+  padding: 18px;
+  background: #ffffff;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  font-size: 1rem;
+}
+
+.profile-link a {
+  color: #1abc9c;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.profile-link a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   PROJECT SECTION SPACING
+========================= */
+
+section {
+  margin-bottom: 40px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+  .project {
+    padding: 20px;
+    margin: 20px auto;
+  }
+
+  .project h3 {
+    font-size: 1.2rem;
+  }
+
+  .project p {
+    font-size: 0.95rem;
+  }
+
+  .profile-link {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+
+}
