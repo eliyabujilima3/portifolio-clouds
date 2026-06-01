@@ -51,7 +51,7 @@ else:
 ALLOWED_ORIGINS = [
     "http://127.0.0.1:5000",
     "http://localhost:5000",
-    "https://portifolio-clouds-zlqf-git-main-eliya-bujilima-s-projects.vercel.app",
+    "https://portifolio-clouds-zlqf.vercel.app",
     "https://portifolio-clouds.onrender.com"
 ]
 
@@ -106,27 +106,40 @@ def serve_frontend(path):
 # CONTACT FORM API
 @app.route("/api/contact", methods=["POST"])
 def contact():
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    if not data:
-        return jsonify({"status": "error", "message": "Invalid JSON"}), 400
+        if not data:
+            return jsonify({"status": "error", "message": "Invalid JSON"}), 400
 
-    name = data.get("name")
-    email = data.get("email")
-    message = data.get("message")
+        name = data.get("name")
+        email = data.get("email")
+        message = data.get("message")
 
-    if not name or not email or not message:
-        return jsonify({"status": "error", "message": "All fields required"}), 400
+        if not name or not email or not message:
+            return jsonify({"status": "error", "message": "All fields required"}), 400
 
-    new_msg = Message(name=name, email=email, message=message)
-    db.session.add(new_msg)
-    db.session.commit()
+        new_msg = Message(name=name, email=email, message=message)
+        db.session.add(new_msg)
+        db.session.commit()
 
-    return jsonify({
-        "status": "success",
-        "message": "Message sent successfully",
-        "id": new_msg.id
-    }), 200
+        print(f"✅ Message saved - ID: {new_msg.id}, From: {email}")
+        
+        return jsonify({
+            "status": "success",
+            "message": "Message sent successfully",
+            "id": new_msg.id
+        }), 200
+    
+    except Exception as e:
+        print(f"❌ Error saving message: {str(e)}")
+        app.logger.exception("Error in contact route")
+        db.session.rollback()
+        return jsonify({
+            "status": "error", 
+            "message": "Failed to save message. Please try again.",
+            "debug": str(e) if app.debug else None
+        }), 500
 
 # ---------------------------
 # GET ALL MESSAGES (ADMIN DASHBOARD)

@@ -1,7 +1,6 @@
 function getApiBase() {
-  return (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-    ? "http://127.0.0.1:5000"
-    : "https://portifolio-clouds.onrender.com";
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  return isLocal ? "http://127.0.0.1:5000" : "https://portifolio-clouds.onrender.com";
 }
 
 // Load messages into the dashboard
@@ -9,14 +8,24 @@ async function loadMessages() {
   const apiBase = getApiBase();
 
   try {
+    console.log("🔄 Loading messages from:", `${apiBase}/api/messages`);
     const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
+    
+    console.log("📨 Response status:", res.status);
+    
     if (!res.ok) {
       throw new Error(`Failed to load messages: ${res.status} ${res.statusText}`);
     }
     const data = await res.json();
+    console.log("✅ Messages loaded:", data.length, "messages found");
 
     const table = document.getElementById("messagesTable");
     table.innerHTML = "";
+
+    if (data.length === 0) {
+      table.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px;'>📭 No messages yet</td></tr>";
+      return;
+    }
 
     data.forEach(msg => {
       const existingReply = msg.reply ? `<div class="existing-reply"><strong>Saved reply:</strong><br>${msg.reply}</div>` : "";
@@ -37,7 +46,9 @@ async function loadMessages() {
       `;
     });
   } catch (error) {
-    console.error("Error loading messages:", error);
+    console.error("❌ Error loading messages:", error);
+    const table = document.getElementById("messagesTable");
+    table.innerHTML = `<tr><td colspan='5' style='color:red; text-align:center; padding: 20px;'>⚠️ Error: ${error.message}</td></tr>`;
     alert("Failed to load messages: " + (error.message || error));
   }
 }
@@ -50,6 +61,7 @@ async function sendReply(event, messageId) {
   const apiBase = getApiBase();
 
   try {
+    console.log("📤 Sending reply for message ID:", messageId);
     const res = await fetch(`${apiBase}/api/reply`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,17 +69,19 @@ async function sendReply(event, messageId) {
       body: JSON.stringify({ id: messageId, message })
     });
 
+    console.log("📨 Reply response status:", res.status);
+
     if (res.ok) {
-      alert("Reply saved successfully!");
+      alert("✅ Reply saved successfully!");
       event.target.reset();
       loadMessages();
     } else {
       const result = await res.json();
-      alert("Error: " + result.message);
+      alert("❌ Error: " + result.message);
     }
   } catch (error) {
-    console.error("Error sending reply:", error);
-    alert("Server error while sending reply.");
+    console.error("❌ Error sending reply:", error);
+    alert("❌ Server error while sending reply: " + error.message);
   }
 }
 
@@ -76,16 +90,18 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   const apiBase = getApiBase();
 
   try {
+    console.log("🔓 Logging out...");
     await fetch(`${apiBase}/api/logout`, {
       method: "POST",
       credentials: 'include'
     });
     window.location.href = "admin-login.html";
   } catch (error) {
-    console.error("Error logging out:", error);
-    alert("Logout failed.");
+    console.error("❌ Error logging out:", error);
+    alert("Logout failed: " + error.message);
   }
 });
 
 // Initialize dashboard
+console.log("🚀 Initializing admin dashboard...");
 loadMessages();
