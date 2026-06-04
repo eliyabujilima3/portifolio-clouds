@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from sqlalchemy import text
 import os
 import sys
+from werkzeug.exceptions import HTTPException
 
 # Ensure backend package imports work whether the app is run from the repo root
 # or from inside the backend folder.
@@ -208,3 +209,29 @@ with app.app_context():
 # RUN SERVER
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# Global error handler: return JSON for API routes to avoid HTML error pages
+@app.errorhandler(Exception)
+def handle_unhandled_exception(e):
+    # Let HTTPExceptions (404, 405, etc.) pass through
+    if isinstance(e, HTTPException):
+        return e
+
+    # Log the exception
+    app.logger.exception("Unhandled exception")
+
+    # If request was to the API, return JSON so frontend can parse it
+    try:
+        path = request.path or ""
+    except Exception:
+        path = ""
+
+    if path.startswith("/api/"):
+        payload = {"status": "error", "message": "Internal Server Error"}
+        if app.debug:
+            payload["debug"] = str(e)
+        return jsonify(payload), 500
+
+    # Fallback: return default HTML 500 (Flask will generate it)
+    return jsonify({"status": "error", "message": "Internal Server Error"}), 500
