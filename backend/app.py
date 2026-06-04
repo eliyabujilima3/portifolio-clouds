@@ -205,33 +205,32 @@ with app.app_context():
                 conn.execute(text("ALTER TABLE message ADD COLUMN reply TEXT"))
                 conn.commit()
 
-# ---------------------------
-# RUN SERVER
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
 # Global error handler: return JSON for API routes to avoid HTML error pages
 @app.errorhandler(Exception)
 def handle_unhandled_exception(e):
-    # Let HTTPExceptions (404, 405, etc.) pass through
+    # If the error is an HTTPException and the request is to the API,
+    # return JSON so the frontend can parse it instead of HTML.
     if isinstance(e, HTTPException):
+        if request.path.startswith("/api/"):
+            payload = {"status": "error", "message": e.description}
+            return jsonify(payload), e.code
         return e
 
     # Log the exception
     app.logger.exception("Unhandled exception")
 
     # If request was to the API, return JSON so frontend can parse it
-    try:
-        path = request.path or ""
-    except Exception:
-        path = ""
-
-    if path.startswith("/api/"):
+    if request.path.startswith("/api/"):
         payload = {"status": "error", "message": "Internal Server Error"}
         if app.debug:
             payload["debug"] = str(e)
         return jsonify(payload), 500
 
-    # Fallback: return default HTML 500 (Flask will generate it)
+    # Fallback for non-API requests
     return jsonify({"status": "error", "message": "Internal Server Error"}), 500
+
+
+# ---------------------------
+# RUN SERVER
+if __name__ == "__main__":
+    app.run(debug=True)
