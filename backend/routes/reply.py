@@ -23,7 +23,8 @@ def send_reply_email(to_email: str, subject: str, body: str) -> None:
     smtp_password = os.getenv("SMTP_PASSWORD")
 
     if not smtp_server or not smtp_user or not smtp_password:
-        raise RuntimeError("SMTP not configured: set SMTP_SERVER/SMTP_USER/SMTP_PASSWORD")
+        current_app.logger.warning("SMTP not configured, skipping reply email send")
+        return
 
     msg = EmailMessage()
     msg["Subject"] = subject
@@ -61,9 +62,12 @@ def reply():
 
         try:
             msg = Message.query.filter_by(id=message_id).first()
-        except Exception:
+        except Exception as e:
             current_app.logger.exception("Failed to retrieve message")
-            return jsonify({"status": "error", "message": "Database error while retrieving message"}), 500
+            error_payload = {"status": "error", "message": "Database error while retrieving message"}
+            if current_app.debug:
+                error_payload["debug"] = str(e)
+            return jsonify(error_payload), 500
 
         if not msg:
             return jsonify({"status": "error", "message": "Message not found"}), 404
@@ -71,10 +75,13 @@ def reply():
         msg.reply = reply_text
         try:
             db.session.commit()
-        except Exception:
+        except Exception as e:
             db.session.rollback()
             current_app.logger.exception("Failed to save reply")
-            return jsonify({"status": "error", "message": "Database error while saving reply"}), 500
+            error_payload = {"status": "error", "message": "Database error while saving reply"}
+            if current_app.debug:
+                error_payload["debug"] = str(e)
+            return jsonify(error_payload), 500
 
         # Try to send reply by email (optional). Log but don't fail the request if email sending fails.
         try:
@@ -88,6 +95,9 @@ def reply():
             return jsonify({"status": "success", "message": "Reply stored; email send failed", "reply": msg.reply}), 200
 
         return jsonify({"status": "success", "message": "Reply stored and emailed successfully", "reply": msg.reply}), 200
-    except Exception:
+    except Exception as e:
         current_app.logger.exception("Unhandled exception in reply route")
-        return jsonify({"status": "error", "message": "Internal server error"}), 500
+        error_payload = {"status": "error", "message": "Internal server error"}
+        if current_app.debug:
+            error_payload["debug"] = str(e)
+        return jsonify(error_payload), 500

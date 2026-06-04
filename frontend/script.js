@@ -10,10 +10,6 @@ document.querySelector("form").addEventListener("submit", async function(e) {
   const apiBase = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
     ? "http://127.0.0.1:5000"
     : "https://portifolio-clouds.onrender.com";
-  // Ensure no trailing slash
-  const apiBase = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-    ? "http://127.0.0.1:5000"
-    : "https://portifolio-clouds.onrender.com";
 
   console.log("📤 Sending message to:", `${apiBase}/api/contact`);
   console.log("📦 Data:", data);

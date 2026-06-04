@@ -53,6 +53,20 @@ async function loadMessages() {
   }
 }
 
+async function parseJsonOrText(response) {
+  const contentType = response.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    return response.json();
+  }
+
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { message: text || response.statusText };
+  }
+}
+
 // Send reply to backend
 async function sendReply(event, messageId) {
   event.preventDefault();
@@ -76,8 +90,8 @@ async function sendReply(event, messageId) {
       event.target.reset();
       loadMessages();
     } else {
-      const result = await res.json();
-      alert("❌ Error: " + result.message);
+      const result = await parseJsonOrText(res);
+      alert("❌ Error: " + (result.message || result.error || JSON.stringify(result)));
     }
   } catch (error) {
     console.error("❌ Error sending reply:", error);

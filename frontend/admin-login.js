@@ -5,11 +5,29 @@ function getApiBase() {
     : "https://portifolio-clouds.onrender.com";
 }
 
+async function parseJsonOrText(response) {
+  const contentType = response.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    return response.json();
+  }
+
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { message: text || response.statusText };
+  }
+}
+
 async function loadMessages() {
   const apiBase = getApiBase();
 
   try {
     const res = await fetch(`${apiBase}/api/messages`, { credentials: 'include' });
+    if (!res.ok) {
+      const result = await parseJsonOrText(res);
+      throw new Error(result.message || JSON.stringify(result));
+    }
     const data = await res.json();
 
     const table = document.getElementById("messagesTable");
@@ -33,7 +51,7 @@ async function loadMessages() {
     });
   } catch (error) {
     console.error("Error loading messages:", error);
-    alert("Failed to load messages.");
+    alert("Failed to load messages: " + (error.message || error));
   }
 }
 
@@ -56,12 +74,12 @@ async function sendReply(event, messageId) {
       alert("Reply sent successfully!");
       event.target.reset();
     } else {
-      const result = await res.json();
-      alert("Error: " + result.message);
+      const result = await parseJsonOrText(res);
+      alert("Error: " + (result.message || result.error || JSON.stringify(result)));
     }
   } catch (error) {
     console.error("Error sending reply:", error);
-    alert("Server error while sending reply.");
+    alert("Server error while sending reply: " + (error.message || error));
   }
 }
 
