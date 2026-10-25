@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#edf3ef"/>
+  <rect width="800" height="72" fill="#173b35"/>
+  <text x="34" y="46" fill="#fff" font-family="Arial, sans-serif" font-size="25" font-weight="700">BIKE BUYERS | CUSTOMER ANALYSIS</text>
+  <text x="36" y="111" fill="#48635b" font-family="Arial, sans-serif" font-size="14" font-weight="700">1,000 DISTINCT CUSTOMER RECORDS</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="32" y="132" width="226" height="106" rx="7" fill="#fff"/>
+    <text x="52" y="164" fill="#668078" font-size="13" font-weight="700">BIKE PURCHASE RATE</text>
+    <text x="52" y="216" fill="#173b35" font-size="40" font-weight="700">48.1%</text>
+    <rect x="274" y="132" width="226" height="106" rx="7" fill="#fff"/>
+    <text x="294" y="164" fill="#668078" font-size="13" font-weight="700">TOP REGION</text>
+    <text x="294" y="203" fill="#173b35" font-size="26" font-weight="700">Pacific</text>
+    <text x="294" y="224" fill="#258b69" font-size="15" font-weight="700">58.9% purchased</text>
+    <rect x="516" y="132" width="252" height="106" rx="7" fill="#fff"/>
+    <text x="536" y="164" fill="#668078" font-size="13" font-weight="700">TOP COMMUTE GROUP</text>
+    <text x="536" y="203" fill="#173b35" font-size="26" font-weight="700">2–5 miles</text>
+    <text x="536" y="224" fill="#258b69" font-size="15" font-weight="700">58.6% purchased</text>
+  </g>
+  <rect x="32" y="260" width="466" height="207" rx="7" fill="#fff"/>
+  <text x="54" y="292" fill="#173b35" font-family="Arial, sans-serif" font-size="17" font-weight="700">Purchase rate by commute distance</text>
+  <g font-family="Arial, sans-serif" font-size="12" fill="#526a62">
+    <text x="54" y="337">0–1 mi</text><text x="54" y="369">1–2 mi</text><text x="54" y="401">2–5 mi</text><text x="54" y="433">5–10 mi</text><text x="54" y="457">10+ mi</text>
+  </g>
+  <g fill="#278768">
+    <rect x="128" y="319" width="209" height="18" rx="3"/><rect x="128" y="351" width="175" height="18" rx="3"/><rect x="128" y="383" width="224" height="18" rx="3"/><rect x="128" y="415" width="151" height="18" rx="3"/><rect x="128" y="439" width="113" height="18" rx="3"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#173b35">
+    <text x="345" y="333">54.6%</text><text x="311" y="365">45.6%</text><text x="360" y="397">58.6%</text><text x="287" y="429">39.6%</text><text x="249" y="453">29.7%</text>
+  </g>
+  <rect x="518" y="260" width="250" height="207" rx="7" fill="#d9e9df"/>
+  <text x="542" y="297" fill="#173b35" font-family="Arial, sans-serif" font-size="16" font-weight="700">Data quality note</text>
+  <text x="542" y="335" fill="#35564b" font-family="Arial, sans-serif" font-size="14">26 repeated IDs were found</text>
+  <text x="542" y="357" fill="#35564b" font-family="Arial, sans-serif" font-size="14">in the raw data. Prepared</text>
+  <text x="542" y="379" fill="#35564b" font-family="Arial, sans-serif" font-size="14">age-bracket labels do not</text>
+  <text x="542" y="401" fill="#35564b" font-family="Arial, sans-serif" font-size="14">consistently match age values.</text>
+  <text x="542" y="440" fill="#668078" font-family="Arial, sans-serif" font-size="12">Excel workbook analysis</text>
+</svg>
