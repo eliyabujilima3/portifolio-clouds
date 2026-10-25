@@ -79,6 +79,10 @@ if DATABASE_URL:
     if "***" in DATABASE_URL:
         print("Ignoring invalid DATABASE_URL placeholder; using local SQLite database.")
     else:
+        if DATABASE_URL.startswith("postgres://"):
+            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+        elif DATABASE_URL.startswith("postgresql://"):
+            DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
